@@ -82,22 +82,6 @@ void _div(stack_t **stack, unsigned int line_number, char *cmd, FILE *fd)
 }
 
 #include "monty.h"
-/**
- * nop - doesn't do anything.
- * @stack: pointer to the stack.
- * @line_number: line number in the Monty bytecode file.
- * @cmd: original command from the file.
- * @fd: file pointer for error handling.
- */
-void nop(stack_t **stack, unsigned int line_number, char *cmd, FILE *fd)
-{
-	(void)stack;
-	(void)line_number;
-	(void)cmd;
-	(void)fd;
-}
-
-#include "monty.h"
 
 /**
  * swap - swaps the top two elements of the stack.
