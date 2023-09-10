@@ -26,14 +26,12 @@ int main(int ac, char **av)
 		dprintf(STDERR_FILENO, "USAGE: monty file\n");
 		exit(EXIT_FAILURE);
 	}
-
 	fd = fopen(av[1], "r");
 	if (fd == NULL)
 	{
 		dprintf(STDERR_FILENO, "Error: Can't open file %s\n", av[1]);
 		exit(EXIT_FAILURE);
 	}
-
 	while ((input_verification = getline(&cmd, &buffer, fd)) > -1)
 	{
 		line_number++;
@@ -42,13 +40,10 @@ int main(int ac, char **av)
 
 		tokens = tokenization(cmd, " \n");
 		if (tokens == NULL)
-		{
 			continue;
-		}
 
 		valid_fun = get_op_func(tokens[0]);
 		valid_fun(&stack, line_number, cmd, fd);
-
 		buffer = 0;
 		reset_inside(cmd, tokens);
 		cmd = NULL;
