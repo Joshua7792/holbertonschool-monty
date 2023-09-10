@@ -44,4 +44,4 @@ Advance Task
 | Task 8 | Implement the mul opcode. |
 
 ## Developers
-Joshua Santiago
+Joshua Santiago and Omar Velez
