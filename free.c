@@ -1,37 +1,21 @@
+
 #include "monty.h"
 
 /**
- * free_array - Frees an array of strings.
- * @tokens: The array of strings to free.
- */
-void free_array(char **tokens)
-{
-	int i;
-
-	if (tokens)
-	{
-		for (i = 0; tokens[i]; i++)
-		{
-			free(tokens[i]);
-		}
-		free(tokens);
-	}
-}
-
-/**
- * free_stack - Frees a stack.
- * @stack: The stack to free.
+ * free_stack - Free the memory allocated for the stack and its nodes.
+ * @stack: Pointer to the stack.
+ *
+ * Description: This function frees the memory allocated for the stack and
+ * its nodes, ensuring there are no memory leaks.
  */
 void free_stack(stack_t *stack)
 {
-	stack_t *current = stack;
+	stack_t *current;
 
-	while (current)
+	while (stack != NULL)
 	{
-		stack_t *temp = current;
-
-		current = current->next;
-
-		free(temp);
+		current = stack;
+		stack = stack->next;
+		free(current);
 	}
 }

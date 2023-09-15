@@ -1,137 +1,121 @@
 #include "monty.h"
 /**
- * push - Pushes an element onto the stack.
- * @stack: A pointer to a pointer to the stack.
- * @line_number: The line number in the Monty bytecode file.
- * @cmd: The original command from the file.
- * @fd: A file pointer for error handling.
+ * push_integer- Push an integer onto the stack.
+ * @stack: Pointer to the stack.
+ * @line_number: The line number where the "push" opcode appears.
  *
+ * Description: This function pushes an integer value onto the stack.
  */
-void push(stack_t **stack, unsigned int line_number, char *cmd, FILE *fd)
+void push_integer(stack_t **stack, unsigned int line_number)
 {
-	char *endptr;
-	long int num;
+	stack_t *new_node;
 
-	num = strtol(tokens[1], &endptr, 10);
-
-	if (*endptr != '\0' || num < INT_MIN || num > INT_MAX)
-	{
-		dprintf(STDERR_FILENO, "L%d: usage: push integer\n", line_number);
-		free(cmd);
-		free_array(tokens);
-		free_stack(*stack);
-		fclose(fd);
-		exit(EXIT_FAILURE);
-	}
-
-	stack_t *new_node = malloc(sizeof(stack_t));
-
-	if (!new_node)
+	/* Allocate memory for a new stack node */
+	new_node = malloc(sizeof(stack_t));
+	if (new_node == NULL)
 	{
 		fprintf(stderr, "Error: malloc failed\n");
-		free(cmd);
-		free_array(tokens);
-		free_stack(*stack);
-		fclose(fd);
 		exit(EXIT_FAILURE);
 	}
 
-	new_node->n = (int)num;
+	/* Set the integer value in the new node */
+	new_node->n = line_number;
+
+	/* Initialize pointers for the new node */
 	new_node->prev = NULL;
 	new_node->next = *stack;
 
-	if (*stack)
+	/* Update the previous pointer of the current top element */
+	if (*stack != NULL)
 		(*stack)->prev = new_node;
 
+	/* Update the stack pointer to point to the new top element */
 	*stack = new_node;
 }
 
-#include "monty.h"
 /**
- * pall - prints all the values on the stack.
- * @stack: pointer to the stack.
- * @line_number: line number in the Monty bytecode file.
- * @cmd: original command from the file.
- * @fd: file pointer for error handling.
+ * pall - Print all elements in the stack.
+ * @stack: Pointer to the stack.
+ * @line_number: The line number where the "pall" opcode appears.
+ *
+ * Description: This function prints all elements in the stack.
  */
-void pall(stack_t **stack, unsigned int line_number, char *cmd, FILE *fd)
+void pall(stack_t **stack, unsigned int line_number)
 {
 	stack_t *current = *stack;
-	(void)line_number; /* Unused, but required to match the function signature */
-	(void)cmd;
-	(void)fd;
 
-	while (current)
+	/* Suppress unused parameter warning for line_number */
+	(void)line_number;
+
+	/* Traverse the stack and print each element */
+	while (current != NULL)
 	{
 		printf("%d\n", current->n);
 		current = current->next;
 	}
 }
 
-#include "monty.h"
-
 /**
- * pint - prints the value at the top of the stack, followed by a new line.
- * @stack: pointer to the stack.
- * @line_number: line number in the Monty bytecode file.
- * @cmd: original command from the file.
- * @fd: file pointer for error handling.
+ * pop - Remove the top element from the stack.
+ * @stack: Pointer to the stack.
+ * @line_number: The line number where the "pop" opcode appears.
+ *
+ * Description: This function removes the top element from the stack.
  */
-void pint(stack_t **stack, unsigned int line_number, char *cmd, FILE *fd)
+void pop(stack_t **stack, unsigned int line_number)
 {
-	if (!stack || !*stack)
-	{
-		dprintf(STDERR_FILENO, "L%d: can't pint, stack empty\n", line_number);
-		free(cmd);
-		free_array(tokens);
-		fclose(fd);
-		free_stack(*stack);
-		exit(EXIT_FAILURE);
-	}
-	printf("%d\n", (*stack)->n);
-}
+	stack_t *temp;
 
-#include "monty.h"
-/**
- * pop - removes the top element of the stack.
- * @stack: pointer to the stack.
- * @line_number: line number in the Monty bytecode file.
- * @cmd: original command from the file.
- * @fd: file pointer for error handling.
- */
-void pop(stack_t **stack, unsigned int line_number, char *cmd, FILE *fd)
-{
-	if (!*stack)
+	/* Check if the stack is empty */
+	if (*stack == NULL)
 	{
-		dprintf(STDERR_FILENO, "L%d: can't pop an empty stack\n", line_number);
-		free(cmd);
-		free_array(tokens);
-		free_stack(*stack);
-		fclose(fd);
+		fprintf(stderr, "L%u: can't pop an empty stack\n", line_number);
 		exit(EXIT_FAILURE);
 	}
 
-	stack_t *tmp = *stack;
+	/* Save a pointer to the current top element */
+	temp = *stack;
+
+	/* Update the stack pointer to point to the next element */
 	*stack = (*stack)->next;
 
-	if (*stack)
+	/* Update the previous pointer of the new top element to NULL */
+	if (*stack != NULL)
 		(*stack)->prev = NULL;
 
-	free(tmp);
+	/* Free the memory of the removed element */
+	free(temp);
 }
 
-#include "monty.h"
 /**
- * nop - doesn't do anything.
- * @stack: pointer to the stack.
- * @line_number: line number in the Monty bytecode file.
- * @cmd: original command from the file.
- * @fd: file pointer for error handling.
+ * swap - Swap the top two elements of the stack.
+ * @stack: Pointer to the stack.
+ * @line_number: The line number where the "swap" opcode appears.
+ *
+ * Description: This function swaps the top two elements of the stack.
  */
-void nop(stack_t **stack, unsigned int line_number, char *cmd, FILE *fd)
+void swap(stack_t **stack, unsigned int line_number)
 {
-	(void)stack;
-	(void)line_number;
-	(void)cmd;
-	(void)fd;
+	stack_t *temp;
+
+	/* Check if there are at least two elements on the stack */
+	if (*stack == NULL || (*stack)->next == NULL)
+	{
+		fprintf(stderr, "L%u: can't swap, stack too short\n", line_number);
+		exit(EXIT_FAILURE);
+	}
+
+	/* Save pointers to the top two elements */
+	temp = (*stack)->next;
+
+	/* Update the next pointers to perform the swap */
+	(*stack)->next = temp->next;
+	temp->next = *stack;
+
+	/* Update the previous pointers to maintain the doubly linked list */
+	temp->prev = NULL;
+	(*stack)->prev = temp;
+
+	/* Update the stack pointer to point to the new top element */
+	*stack = temp;
 }
