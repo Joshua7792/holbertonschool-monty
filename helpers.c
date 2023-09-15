@@ -1,89 +1,53 @@
 #include "monty.h"
-
 /**
- * get_op_func - selects the correct function to perform an operation
- * @cmd: the opcode to be matched
+ * exec_instruction - Execute Monty ByteCode instruction.
+ * @stack: Pointer to the stack.
+ * @line: The instruction line.
+ * @line_number: The line number in the Monty file.
  *
- * Return: a function pointer to the corresponding function,NULL if not found
+ * Description: This function parses and executes Monty ByteCode instructions
+ * using an array of instruction_t structures.
  */
-void (*get_op_func(char *cmd))(stack_t **, unsigned int, char *, FILE *)
+
+void monty_instruction(stack_t **stack, char *line, unsigned int line_number)
 {
-	instruction_t opcodes[] = {
-		{"push", push},
+	char *opcode = strtok(line, " \t\n$");
+
+	if (!opcode)
+		return;
+
+	instruction_t instructions[] = {
+		{"push", push_integer},
 		{"pall", pall},
-		{"pint", pint},
 		{"pop", pop},
-		{"nop", nop},
 		{"swap", swap},
-		{"add", add},
-		{"sub", sub},
-		{"div", _div},
-		{"mul", mul},
+		{"add", add_element},
+		{"pint", pint},
+		{"nop", nop},
 		{NULL, NULL}};
 
-	int i = 0;
-
-	while (opcodes[i].opcode)
+	for (int i = 0; instructions[i].opcode; i++)
 	{
-		if (strcmp(cmd, opcodes[i].opcode) == 0)
-			return (opcodes[i].f);
-		i++;
-	}
-
-	return (NULL); /* Return NULL if opcode is not found */
-}
-
-/**
- * reset_inside - resets the values inside the command and tokens
- * @cmd: the original command string
- * @tokens: the array of tokens
- */
-void reset_inside(char *cmd, char **tokens)
-{
-	if (cmd)
-	{
-		free(cmd);
-		cmd = NULL;
-	}
-
-	if (tokens)
-	{
-		free_array(tokens);
-		tokens = NULL;
-	}
-}
-
-/**
- * tokenization - tokenizes a string into an array of tokens
- * @ptr: the string to tokenize
- * @delim: the delimiter to split the string
- *
- * Return: an array of tokens, or NULL on failure
- */
-char **tokenization(char *ptr, char *delim)
-{
-	char **tokens = NULL;
-	char *token = NULL;
-	int i = 0;
-
-	tokens = malloc(sizeof(char *) * 128); /* Adjust the size as needed */
-
-	if (tokens == NULL)
-		return (NULL);
-
-	token = strtok(ptr, delim);
-	while (token != NULL)
-	{
-		tokens[i] = strdup(token);
-		if (tokens[i] == NULL)
+		if (!strcmp(opcode, instructions[i].opcode))
 		{
-			free_array(tokens);
-			return (NULL);
-		}
-		token = strtok(NULL, delim);
-		i++;
-	}
-	tokens[i] = NULL;
+			if (!strcmp(opcode, "push"))
+			{
+				char *arg = strtok(NULL, " \t\n$");
 
-	return (tokens);
+				if (!arg || (!isdigit(*arg) && *arg != '-' && *arg != '+'))
+				{
+					fprintf(stderr, "L%u: usage: push integer\n", line_number);
+					exit(EXIT_FAILURE);
+				}
+				instructions[i].f(stack, atoi(arg));
+			}
+			else
+			{
+				instructions[i].f(stack, line_number);
+			}
+			return;
+		}
+	}
+	fprintf(stderr, "L%u: unknown instruction %s\n", line_number, opcode);
+	exit(EXIT_FAILURE);
 }

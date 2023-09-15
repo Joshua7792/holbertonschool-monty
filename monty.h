@@ -1,14 +1,14 @@
 #ifndef MONTY_H
 #define MONTY_H
 
-#include <stdio.h>
+/*libraries*/
 #include <stdlib.h>
-#include <unistd.h>
+#include <stdio.h>
 #include <string.h>
+#include <unistd.h>
 #include <ctype.h>
-#include <limits.h>
 
-extern char **tokens;  /* Updated to declare tokens as char ** */
+/*structures*/
 
 /**
  * struct stack_s - doubly linked list representation of a stack (or queue)
@@ -37,27 +37,18 @@ typedef struct stack_s
 typedef struct instruction_s
 {
 	char *opcode;
-	void (*f)(stack_t **stack, unsigned int line_number, char *cmd, FILE *fd);
+	void (*f)(stack_t **stack, unsigned int line_number);
 } instruction_t;
 
-/* Prototypes */
-int main(int ac, char **av);
-char **tokenization(char *ptr, char *delim);
-void (*get_op_func(char *cmd))(stack_t **, unsigned int, char *cmd, FILE *fd);
-void free_array(char **tokens);
+/*prototypes*/
+int main(int argc, char *argv[]);
+void monty_instruction(stack_t **stack, char *line, unsigned int line_number);
+void push_integer(stack_t **stack, unsigned int line_number);
+void pall(stack_t **stack, unsigned int line_number);
+void pop(stack_t **stack, unsigned int line_number);
+void swap(stack_t **stack, unsigned int line_number);
+void add_element(stack_t **stack, unsigned int line_number);
+void pint(stack_t **stack, unsigned int line_number);
+void nop(stack_t **stack, unsigned int line_number);
 void free_stack(stack_t *stack);
-void reset_inside(char *cmd, char **tokens);
-
-/* Operation cmd */
-void push(stack_t **stack, unsigned int line_number, char *cmd, FILE *fd);
-void pall(stack_t **stack, unsigned int line_number, char *cmd, FILE *fd);
-void pint(stack_t **stack, unsigned int line_number, char *cmd, FILE *fd);
-void pop(stack_t **stack, unsigned int line_number, char *cmd, FILE *fd);
-void nop(stack_t **stack, unsigned int line_number, char *cmd, FILE *fd);
-void swap(stack_t **stack, unsigned int line_number, char *cmd, FILE *fd);
-void add(stack_t **stack, unsigned int line_number, char *cmd, FILE *fd);
-void sub(stack_t **stack, unsigned int line_number, char *cmd, FILE *fd);
-void _div(stack_t **stack, unsigned int line_number, char *cmd, FILE *fd);
-void mul(stack_t **stack, unsigned int line_number, char *cmd, FILE *fd);
-
 #endif
