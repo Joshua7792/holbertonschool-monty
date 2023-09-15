@@ -1,12 +1,12 @@
 #include "monty.h"
 /**
- * add_element - Add the top two elements of the stack.
+ * add - Add the top two elements of the stack.
  * @stack: Pointer to the stack.
  * @line_number: The line number where the "add" opcode appears.
  *
  * Description: This function adds the top two elements of the stack.
  */
-void add_element(stack_t **stack, unsigned int line_number)
+void add(stack_t **stack, unsigned int line_number)
 {
 	int sum;
 	stack_t *temp;

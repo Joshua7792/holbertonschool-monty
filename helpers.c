@@ -9,7 +9,7 @@
  * using an array of instruction_t structures.
  */
 
-void monty_instruction(stack_t **stack, char *line, unsigned int line_number)
+void exec_instruction(stack_t **stack, char *line, unsigned int line_number)
 {
 	char *opcode = strtok(line, " \t\n$");
 
@@ -17,11 +17,11 @@ void monty_instruction(stack_t **stack, char *line, unsigned int line_number)
 		return;
 
 	instruction_t instructions[] = {
-		{"push", push_integer},
+		{"push", push},
 		{"pall", pall},
 		{"pop", pop},
 		{"swap", swap},
-		{"add", add_element},
+		{"add", add},
 		{"pint", pint},
 		{"nop", nop},
 		{NULL, NULL}};

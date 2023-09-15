@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
 	while (getline(&line, &len, file) != -1)
 	{
 		line_number++;
-		monty_instruction(&stack, line, line_number);
+		exec_instruction(&stack, line, line_number);
 	}
 	fclose(file);
 	free_stack(stack);

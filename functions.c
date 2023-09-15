@@ -1,12 +1,12 @@
 #include "monty.h"
 /**
- * push_integer- Push an integer onto the stack.
+ * push - Push an integer onto the stack.
  * @stack: Pointer to the stack.
  * @line_number: The line number where the "push" opcode appears.
  *
  * Description: This function pushes an integer value onto the stack.
  */
-void push_integer(stack_t **stack, unsigned int line_number)
+void push(stack_t **stack, unsigned int line_number)
 {
 	stack_t *new_node;
 
