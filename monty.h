@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <ctype.h>
+#include <limits.h>
 
 extern char **tokens;  /* Updated to declare tokens as char ** */
 

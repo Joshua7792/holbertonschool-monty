@@ -1,15 +1,20 @@
 #include "monty.h"
-
 /**
- * push - pushes an element onto the stack.
- * @stack: pointer to the stack.
- * @line_number: line number in the Monty bytecode file.
- * @cmd: original command from the file.
- * @fd: file pointer for error handling.
+ * push - Pushes an element onto the stack.
+ * @stack: A pointer to a pointer to the stack.
+ * @line_number: The line number in the Monty bytecode file.
+ * @cmd: The original command from the file.
+ * @fd: A file pointer for error handling.
+ *
  */
 void push(stack_t **stack, unsigned int line_number, char *cmd, FILE *fd)
 {
-	if (!tokens[1] || !isdigit(*tokens[1]))
+	char *endptr;
+	long int num;
+
+	num = strtol(tokens[1], &endptr, 10);
+
+	if (*endptr != '\0' || num < INT_MIN || num > INT_MAX)
 	{
 		dprintf(STDERR_FILENO, "L%d: usage: push integer\n", line_number);
 		free(cmd);
@@ -31,7 +36,7 @@ void push(stack_t **stack, unsigned int line_number, char *cmd, FILE *fd)
 		exit(EXIT_FAILURE);
 	}
 
-	new_node->n = atoi(tokens[1]);
+	new_node->n = (int)num;
 	new_node->prev = NULL;
 	new_node->next = *stack;
 
@@ -85,7 +90,6 @@ void pint(stack_t **stack, unsigned int line_number, char *cmd, FILE *fd)
 	}
 	printf("%d\n", (*stack)->n);
 }
-
 
 #include "monty.h"
 /**
