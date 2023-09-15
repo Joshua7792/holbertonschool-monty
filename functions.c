@@ -64,6 +64,7 @@ void pall(stack_t **stack, unsigned int line_number, char *cmd, FILE *fd)
 }
 
 #include "monty.h"
+
 /**
  * pint - prints the value at the top of the stack, followed by a new line.
  * @stack: pointer to the stack.
@@ -73,17 +74,18 @@ void pall(stack_t **stack, unsigned int line_number, char *cmd, FILE *fd)
  */
 void pint(stack_t **stack, unsigned int line_number, char *cmd, FILE *fd)
 {
-	if (!*stack)
+	if (!stack || !*stack)
 	{
 		dprintf(STDERR_FILENO, "L%d: can't pint, stack empty\n", line_number);
 		free(cmd);
 		free_array(tokens);
-		free_stack(*stack);
 		fclose(fd);
+		free_stack(*stack);
 		exit(EXIT_FAILURE);
 	}
 	printf("%d\n", (*stack)->n);
 }
+
 
 #include "monty.h"
 /**
