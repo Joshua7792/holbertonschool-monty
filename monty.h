@@ -8,7 +8,6 @@
 #include <unistd.h>
 #include <ctype.h>
 
-#define DELIMS "\n \r\t"
 
 /*structures*/
 
