@@ -12,6 +12,7 @@
 void exec_instruction(stack_t **stack, char *line, unsigned int line_number)
 {
 	char *opcode = strtok(line, " \t\n$");
+	int i;
 
 	if (!opcode)
 		return;
@@ -26,7 +27,7 @@ void exec_instruction(stack_t **stack, char *line, unsigned int line_number)
 		{"nop", nop},
 		{NULL, NULL}};
 
-	for (int i = 0; instructions[i].opcode; i++)
+	for (i = 0; instructions[i].opcode; i++)
 	{
 		if (!strcmp(opcode, instructions[i].opcode))
 		{
