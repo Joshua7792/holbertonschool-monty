@@ -43,9 +43,7 @@ void exec_instruction(stack_t **stack, char *line, unsigned int line_number)
 				instructions[i].f(stack, atoi(arg));
 			}
 			else
-			{
 				instructions[i].f(stack, line_number);
-			}
 			return;
 		}
 	}
