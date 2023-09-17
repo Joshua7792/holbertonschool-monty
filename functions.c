@@ -48,7 +48,7 @@ void pall(stack_t **stack, unsigned int line_number)
 	(void)line_number;
 
 	/* Traverse the stack and print each element */
-	while (current != NULL)
+	while (current)
 	{
 		printf("%d\n", current->n);
 		current = current->next;
