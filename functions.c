@@ -9,6 +9,14 @@
 void push(stack_t **stack, unsigned int line_number)
 {
 	stack_t *new_node;
+	char num;
+
+	num = strtok(NULL, DELIMS);
+	if (num == NULL)
+	{
+		printf("L%u: usage: push integer\n", line_number);
+		exit(EXIT_FAILURE);
+	}
 
 	/* Allocate memory for a new stack node */
 	new_node = malloc(sizeof(stack_t));
@@ -18,10 +26,8 @@ void push(stack_t **stack, unsigned int line_number)
 		exit(EXIT_FAILURE);
 	}
 
-	/* Set the integer value in the new node */
-	new_node->n = line_number;
-
 	/* Initialize pointers for the new node */
+	new_node->n = atoi(num);
 	new_node->prev = NULL;
 	new_node->next = *stack;
 
@@ -48,7 +54,7 @@ void pall(stack_t **stack, unsigned int line_number)
 	(void)line_number;
 
 	/* Traverse the stack and print each element */
-	while (current != NULL)
+	while (current)
 	{
 		printf("%d\n", current->n);
 		current = current->next;
