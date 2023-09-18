@@ -52,4 +52,5 @@ void add(stack_t **stack, unsigned int line_number);
 void pint(stack_t **stack, unsigned int line_number);
 void nop(stack_t **stack, unsigned int line_number);
 void free_stack(stack_t *stack);
+int is_integer(const char *str);
 #endif
