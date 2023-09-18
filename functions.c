@@ -8,38 +8,28 @@
  */
 void push(stack_t **stack, unsigned int line_number)
 {
-	char *arg = strtok(NULL, " \t\n$");
 	stack_t *new_node;
 
-	if (!arg || !*arg || (*arg != '-' && !isdigit(*arg)))
-	{
-		fprintf(stderr, "L%u: usage: push integer\n", line_number);
-		exit(EXIT_FAILURE);
-	}
-
-	for (int i = 1; arg[i]; i++)
-	{
-		if (!isdigit(arg[i]))
-		{
-			fprintf(stderr, "L%u: usage: push integer\n", line_number);
-			exit(EXIT_FAILURE);
-		}
-	}
-
+	/* Allocate memory for a new stack node */
 	new_node = malloc(sizeof(stack_t));
-	if (!new_node)
+	if (new_node == NULL)
 	{
 		fprintf(stderr, "Error: malloc failed\n");
 		exit(EXIT_FAILURE);
 	}
 
-	new_node->n = atoi(arg);
+	/* Set the integer value in the new node */
+	new_node->n = line_number;
+
+	/* Initialize pointers for the new node */
 	new_node->prev = NULL;
 	new_node->next = *stack;
 
-	if (*stack)
+	/* Update the previous pointer of the current top element */
+	if (*stack != NULL)
 		(*stack)->prev = new_node;
 
+	/* Update the stack pointer to point to the new top element */
 	*stack = new_node;
 }
 
